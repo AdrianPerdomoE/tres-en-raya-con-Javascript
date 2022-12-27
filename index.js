@@ -7,7 +7,7 @@ function turn(elem) {
                 localStorage.setItem(player.num, 1)
             }
             else {
-                localStorage.setItem(player.num, ++parseint(score))
+                localStorage.setItem(player.num, parseInt(score) + 1)
             }
         }
         else {
