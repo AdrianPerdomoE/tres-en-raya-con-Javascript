@@ -1,19 +1,36 @@
+function myAlert(text) {
+    let btn = document.createElement("button")
+    btn.className = "Acept"
+    btn.innerText = "Ok"
+    let h2 = document.createElement("h2")
+    h2.innerText = text
+    h2.className = "popText"
+    let popUp = document.createElement("div")
+    popUp.appendChild(h2)
+    popUp.appendChild(btn)
+    btn.addEventListener("click", elm => {
+        popUp.remove()
+        setTimeout(er => { game.reload() }, 1000)
+    })
+    popUp.id = "popUp"
+    document.body.appendChild(popUp)
+}
 function turn(elem) {
     function endGame(win) {
         if (win) {
-            alert(`Felicidades jugador ${player.num} ha ganado`);
+            myAlert(`Felicidades jugador ${player.num} ha ganado`);
             let score = localStorage.getItem(player.num)
             if (score == null) {
                 localStorage.setItem(player.num, 1)
             }
             else {
-                localStorage.setItem(player.num, parseInt(score) + 1)
+                localStorage.setItem(player.num, parseInt(score) + 1);
             }
         }
         else {
-            alert("no hay mas espacios disponibles, juego en empate");
+            myAlert("no hay mas espacios disponibles, juego en empate");
         }
-        document.location.reload()
+
     }
     let text = document.createElement("h1");
     let player = PLAYERS[CURRENTPLAYER];
@@ -129,32 +146,55 @@ class Player {
 }
 class Game {
     constructor() {
-        let boxes = [];
+        this.boxes = [];
         for (let i = 1; i < 10; i++) {
-            boxes.push(document.getElementById(i.toString()));
+            this.boxes.push(document.getElementById(i.toString()));
         }
-        boxes.forEach(box => {
+        this.boxes.forEach(box => {
             box.addEventListener("click", turn, true);
         });
+        let scoreWord = "Score"
+        this.scoresBox = []
+        for (let number = 0; number < 2; number++) {
+            let scoreBox = document.getElementById(scoreWord + number);
+            scoreBox.appendChild(this.getScore(number));
+            this.scoresBox.push(scoreBox)
+        }
+        document.getElementById("reset").addEventListener("click", e => {
+            localStorage.clear();
+            game.reload();
+        })
+    }
+    getScore(n) {
+        let scoreContent = document.createElement("h2");
+        scoreContent.className = "container"
+        let value = localStorage.getItem(n);
+        if (value == null) {
+            value = "0";
+        }
+        scoreContent.innerText = value;
+        return scoreContent
+    }
+    reload() {
+        this.boxes.forEach(box => {
+            box.innerHTML = ""
+            box.appendChild(document.createElement("p"))
+        });
+        this.scoresBox.forEach(sb => {
+            sb.innerHTML = ""
+        });
+        for (let number = 0; number < 2; number++) {
+            let scoreBox = this.scoresBox[number]
+            scoreBox.appendChild(this.getScore(number));
+        }
+        CURRENTPLAYER = 0;
+        avaibleBoxes = 9;
+        Player.NUM = 0;
+        PLAYERS = [new Player("X"), new Player("O")];
+
     }
 }
 var CURRENTPLAYER = 0;
 var avaibleBoxes = 9;
-const PLAYERS = [new Player("X"), new Player("O")];
-let scoreWord = "Score"
-for (let number = 0; number < 2; number++) {
-    let scoreBox = document.getElementById(scoreWord + number);
-    let scoreContent = document.createElement("h2");
-    scoreContent.className = "container"
-    let value = localStorage.getItem(number);
-    if (value == null) {
-        value = "0";
-    }
-    scoreContent.innerText = value;
-    scoreBox.appendChild(scoreContent);
-}
-document.getElementById("reset").addEventListener("click", e => {
-    localStorage.clear();
-    document.location.reload();
-})
-new Game();
+var PLAYERS = [new Player("X"), new Player("O")];
+const game = new Game();
