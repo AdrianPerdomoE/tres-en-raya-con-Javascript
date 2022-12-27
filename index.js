@@ -2,6 +2,13 @@ function turn(elem) {
     function endGame(win) {
         if (win) {
             alert(`Felicidades jugador ${player.num} ha ganado`);
+            let score = localStorage.getItem(player.num)
+            if (score == null) {
+                localStorage.setItem(player.num, 1)
+            }
+            else {
+                localStorage.setItem(player.num, ++parseint(score))
+            }
         }
         else {
             alert("no hay mas espacios disponibles, juego en empate");
@@ -17,6 +24,7 @@ function turn(elem) {
     let win = player.addBox(elem.currentTarget.id);
     if (win) {
         endGame(win);
+        return
     }
     avaibleBoxes--;
     if (avaibleBoxes === 0) endGame(false);
@@ -133,4 +141,20 @@ class Game {
 var CURRENTPLAYER = 0;
 var avaibleBoxes = 9;
 const PLAYERS = [new Player("X"), new Player("O")];
+let scoreWord = "Score"
+for (let number = 0; number < 2; number++) {
+    let scoreBox = document.getElementById(scoreWord + number);
+    let scoreContent = document.createElement("h2");
+    scoreContent.className = "container"
+    let value = localStorage.getItem(number);
+    if (value == null) {
+        value = "0";
+    }
+    scoreContent.innerText = value;
+    scoreBox.appendChild(scoreContent);
+}
+document.getElementById("reset").addEventListener("click", e => {
+    localStorage.clear();
+    document.location.reload();
+})
 new Game();
