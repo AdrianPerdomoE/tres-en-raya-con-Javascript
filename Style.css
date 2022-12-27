@@ -1,13 +1,14 @@
-td{
+td {
     border: 0.3rem solid black;
     width: 5rem;
     height: 5rem;
 }
-.container{
+
+.container {
     display: flex;
     justify-content: center;
 }
-table{
-    display:flex;
-}
 
+table {
+    display: flex;
+}
