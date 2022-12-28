@@ -1,6 +1,6 @@
 function myAlert(text) {
     let btn = document.createElement("button")
-    btn.className = "Acept"
+    btn.className = "acept"
     btn.innerText = "Ok"
     let h2 = document.createElement("h2")
     h2.innerText = text
@@ -10,7 +10,7 @@ function myAlert(text) {
     popUp.appendChild(btn)
     btn.addEventListener("click", elm => {
         popUp.remove()
-        setTimeout(er => { game.reload() }, 1000)
+        setTimeout(er => { game.reload() }, 500)
     })
     popUp.id = "popUp"
     document.body.appendChild(popUp)
